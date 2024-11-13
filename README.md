@@ -20,6 +20,8 @@ sColor GetColor(int x, int y) const;	 --> Returns color at (x, y) location of im
 	
 void SetColor(const sColor& color, int x, int y);	--> Sets RGBA color at location (x, y) of image.bmp
 
+void ReadBMP(const char* path)		--> Reads the .bmp file and stores it in cBMPImage's object and you can export it later
+
 void ExportBMP(const char* path) const;		--> Exports/Saves the bitmap image with path as name in solution directory.
 
 ---

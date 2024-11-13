@@ -1,9 +1,9 @@
-// Created by Onkar Parag Kulkarni, Nov 2024
+// Developed by Onkar Parag Kulkarni, Nov 2024
 // Just for portfolio purposes and had some time between some project deadlines that's why xD
 
 #include "pch.h"
 #include "framework.h"
-#include "BMP_ReaderWriter.h"
+#include "../include/BMP_ReaderWriter.h"
 #include <fstream>
 #include <iostream>
 
@@ -39,6 +39,67 @@ void cBMPImage::SetColor(const sColor& color, int x, int y)
     imageColors[y * imageWidth + x].g = color.g;
     imageColors[y * imageWidth + x].b = color.b;
     imageColors[y * imageWidth + x].a = color.a;
+}
+
+void cBMPImage::ReadBMP(const char* path)
+{
+    std::ifstream inputFile;
+    inputFile.open(path, std::ios::in | std::ios::binary);
+
+    if (!inputFile.is_open()) {
+        std::cerr << "File couldn't be opened!" << std::endl;
+        return;
+    }
+
+    const int FILE_HEADER_SIZE = 14;
+    const int INFO_HEADER_SIZE = 40;
+
+    unsigned char fileHeader[FILE_HEADER_SIZE];
+    unsigned char infoHeader[INFO_HEADER_SIZE];
+
+    inputFile.read(reinterpret_cast<char*>(fileHeader), FILE_HEADER_SIZE);
+    inputFile.read(reinterpret_cast<char*>(infoHeader), INFO_HEADER_SIZE);
+
+    if (fileHeader[0] != 'B' || fileHeader[1] != 'M') {
+        std::cerr << "Specified path is not .bmp image" << std::endl;
+        inputFile.close();
+        return;
+    }
+
+    int fileSize = fileHeader[2] 
+        + (fileHeader[3] << 8) 
+        + (fileHeader[4] << 16) 
+        + (fileHeader[5] << 24);    // Reading from little endian
+
+    imageWidth = infoHeader[4]
+        + (infoHeader[5] << 8)
+        + (infoHeader[6] << 16)
+        + (infoHeader[7] << 24);
+
+    imageHeight = infoHeader[8]
+        + (infoHeader[9] << 8)
+        + (infoHeader[10] << 16)
+        + (infoHeader[11] << 24);
+
+    imageColors.resize(imageWidth * imageHeight);
+
+    // We don't need to calculate padding as we are using RGBA values
+
+    for (int y = 0; y < imageHeight; y++) {
+        for (int x = 0; x < imageWidth; x++) {
+            unsigned char color[4];
+            inputFile.read(reinterpret_cast<char*>(color), 4);
+
+            imageColors[y * imageWidth + x].r = static_cast<float>(color[3]) / 255.0f;
+            imageColors[y * imageWidth + x].g = static_cast<float>(color[2]) / 255.0f;
+            imageColors[y * imageWidth + x].b = static_cast<float>(color[1]) / 255.0f;
+            imageColors[y * imageWidth + x].a = static_cast<float>(color[0]) / 255.0f;
+        }
+
+        // Don't need padding here
+    }
+    inputFile.close();
+    std::cout << "File read successfully!" << std::endl;
 }
 
 void cBMPImage::ExportBMP(const char* path) const
@@ -103,7 +164,7 @@ void cBMPImage::ExportBMP(const char* path) const
     infoHeader[2] = 0;
     infoHeader[3] = 0;
 
-    // Image width
+    // Image width  (Little Endian order for writing)
     infoHeader[4] = imageWidth;
     infoHeader[5] = imageWidth >> 8;
     infoHeader[6] = imageWidth >> 16;

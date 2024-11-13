@@ -1,4 +1,4 @@
-// Created by Onkar Parag Kulkarni, Nov 2024
+// Developed by Onkar Parag Kulkarni, Nov 2024
 // Just for portfolio purposes and had some time between some project deadlines that's why xD
 
 #pragma once
@@ -20,9 +20,11 @@ public:
 	sColor GetColor(int x, int y) const;
 	void SetColor(const sColor& color, int x, int y);
 
+	void ReadBMP(const char* path);
 	void ExportBMP(const char* path) const;
 
 private:
+
 	int imageWidth;
 	int imageHeight;
 	std::vector<sColor> imageColors;

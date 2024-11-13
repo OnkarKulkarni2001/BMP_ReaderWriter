@@ -21,7 +21,7 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BMP_ReaderWriter.h">
+    <ClInclude Include="..\include\BMP_ReaderWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
