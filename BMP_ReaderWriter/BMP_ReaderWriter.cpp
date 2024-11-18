@@ -45,6 +45,16 @@ cBMPImage::~cBMPImage()
 {
 }
 
+int cBMPImage::GetImageWidth()
+{
+    return imageWidth;
+}
+
+int cBMPImage::GetImageHeight()
+{
+    return imageHeight;
+}
+
 sColor32Bit cBMPImage::GetColor32Bit(int x, int y) const
 {
     return imageColors32Bit[y * imageWidth + x];

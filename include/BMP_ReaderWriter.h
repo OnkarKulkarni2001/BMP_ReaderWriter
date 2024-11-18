@@ -25,6 +25,9 @@ public:
 	cBMPImage(int width, int height);
 	~cBMPImage();
 
+	int GetImageWidth();
+	int GetImageHeight();
+
 	sColor32Bit GetColor32Bit(int x, int y) const;
 	sColor24Bit GetColor24Bit(int x, int y) const;
 	void SetColor32Bit(const sColor32Bit& color, int x, int y);
