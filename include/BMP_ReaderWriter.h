@@ -4,12 +4,20 @@
 #pragma once
 #include <vector>
 
-struct sColor {
+struct sColor32Bit {
 	float r, g, b, a;
 
-	sColor();
-	sColor(float r, float g, float b, float a);
-	~sColor();
+	sColor32Bit();
+	sColor32Bit(float r, float g, float b, float a);
+	~sColor32Bit();
+};
+
+struct sColor24Bit {
+	float r, g, b;
+
+	sColor24Bit();
+	sColor24Bit(float r, float g, float b);
+	~sColor24Bit();
 };
 
 class cBMPImage {
@@ -17,15 +25,20 @@ public:
 	cBMPImage(int width, int height);
 	~cBMPImage();
 
-	sColor GetColor(int x, int y) const;
-	void SetColor(const sColor& color, int x, int y);
+	sColor32Bit GetColor32Bit(int x, int y) const;
+	sColor24Bit GetColor24Bit(int x, int y) const;
+	void SetColor32Bit(const sColor32Bit& color, int x, int y);
+	void SetColor24Bit(const sColor24Bit& color, int x, int y);
 
-	void ReadBMP(const char* path);
-	void ExportBMP(const char* path) const;
+	void ReadBMP32Bit(const char* path);
+	void ReadBMP24Bit(const char* path);
+	void ExportBMP32Bit(const char* path) const;
+	void ExportBMP24Bit(const char* path) const;
 
 private:
 
 	int imageWidth;
 	int imageHeight;
-	std::vector<sColor> imageColors;
+	std::vector<sColor32Bit> imageColors32Bit;
+	std::vector<sColor24Bit> imageColors24Bit;
 };
