@@ -412,8 +412,8 @@ void cBMPImage::ExportBMP24Bit(const char* path) const
     infoHeader[12] = 1;     // I guess this is only one plane because it is 2D image
     infoHeader[13] = 0;
 
-    // Bits per pixel RGBA
-    infoHeader[14] = 32;
+    // Bits per pixel RGB
+    infoHeader[14] = 24;
     infoHeader[15] = 0;
 
     // Compression (We have lot of space xD so won't use compression)
@@ -458,9 +458,9 @@ void cBMPImage::ExportBMP24Bit(const char* path) const
 
     for (int y = 0; y < imageHeight; y++) {
         for (int x = 0; x < imageWidth; x++) {
-            unsigned char r = static_cast<unsigned char>(GetColor32Bit(x, y).r * 255.0f);
-            unsigned char g = static_cast<unsigned char>(GetColor32Bit(x, y).g * 255.0f);
-            unsigned char b = static_cast<unsigned char>(GetColor32Bit(x, y).b * 255.0f);
+            unsigned char r = static_cast<unsigned char>(GetColor24Bit(x, y).r * 255.0f);
+            unsigned char g = static_cast<unsigned char>(GetColor24Bit(x, y).g * 255.0f);
+            unsigned char b = static_cast<unsigned char>(GetColor24Bit(x, y).b * 255.0f);
 
             unsigned char color[] = { b, g, r };
 
@@ -468,7 +468,6 @@ void cBMPImage::ExportBMP24Bit(const char* path) const
         }
 
         outputFile.write(reinterpret_cast<char*>(bmpPad), PADDING_AMOUNT);
-        // If we had used only rgb values then we would have required to write padding amount in here
     }
 
     outputFile.close();
